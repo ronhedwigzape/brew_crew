@@ -10,7 +10,7 @@ class AuthService {
     try {
 
       UserCredential result = await _auth.signInAnonymously();
-      User user = result.user;
+      User? user = result.user;
       return user;
 
     } catch(e) {
