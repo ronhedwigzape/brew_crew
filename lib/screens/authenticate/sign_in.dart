@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({super.key});
+ 
+  final Function toggleView;
+  const SignIn({super.key, required this.toggleView});
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -22,6 +24,15 @@ class _SignInState extends State<SignIn> {
         backgroundColor: Colors.brown[400],
         elevation: 0.0,
         title: const Text('Sign in to Brew Crew'),
+        actions: <Widget>[
+          TextButton.icon(
+            icon: const Icon(Icons.person),
+            label: const Text('Register'),
+            onPressed: () => {
+              widget.toggleView()
+            }
+          ),
+        ],
       ),
       body: Container(
         padding:
