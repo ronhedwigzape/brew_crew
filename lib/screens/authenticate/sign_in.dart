@@ -1,4 +1,4 @@
-import 'package:brew_crew/services/auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -10,8 +10,6 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   
-  final AuthService _auth = AuthService();
-
   // text field state
   String email = ''; 
   String password = '';
@@ -46,8 +44,10 @@ class _SignInState extends State<SignIn> {
                 backgroundColor: Colors.pink[400],
               ),
               onPressed: () async {
-                print(email);
-                print(password);
+                if (kDebugMode) {
+                  print('email: $email');
+                  print('password: $password');
+                }
               },
               child: const Text(
                 'Sign in',

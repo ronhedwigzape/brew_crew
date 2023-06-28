@@ -1,4 +1,4 @@
-import 'package:brew_crew/services/auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -9,8 +9,6 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
-  final AuthService _auth = AuthService();
 
   // text field state
   String email = '';
@@ -47,8 +45,10 @@ class _RegisterState extends State<Register> {
                 backgroundColor: Colors.pink[400],
               ),
               onPressed: () async {
-                print(email);
-                print(password);
+                if (kDebugMode) {
+                  print('email: $email');
+                  print('password: $password');
+                }
               },
               child: const Text(
                 'Register',
