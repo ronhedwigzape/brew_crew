@@ -1,3 +1,4 @@
+import 'package:brew_crew/services/auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +12,14 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+
+  final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
   
   // text field state
   String email = ''; 
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -35,36 +40,50 @@ class _SignInState extends State<SignIn> {
         ],
       ),
       body: Container(
-        padding:
-            const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
+          key: _formKey,
           child: Column(children: <Widget>[
             const SizedBox(height: 20.0),
-            TextFormField(onChanged: (val) {
-              setState(() => email = val);
-            }),
+            TextFormField(
+              validator: (val) => val!.isEmpty ? 'Enter an email' : null,
+              onChanged: (val) {
+                setState(() => email = val);
+              }
+            ),
             const SizedBox(height: 20.0),
             TextFormField(
-                obscureText: true,
-                onChanged: (val) {
-                  setState(() => password = val);
-                }),
+              validator: (val) => val!.length < 6 ? 'Enter a password 6+ chars long' : null,
+              obscureText: true,
+              onChanged: (val) {
+                setState(() => password = val);
+              }
+            ),
             const SizedBox(height: 20.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.pink[400],
               ),
               onPressed: () async {
-                if (kDebugMode) {
-                  print('email: $email');
-                  print('password: $password');
+                if (_formKey.currentState!.validate()) {
+                  if (kDebugMode) {
+                    print('valid');
+                  }
                 }
               },
               child: const Text(
                 'Sign in',
                 style: TextStyle(color: Colors.white),
               ),
-            )
+            ),
+            const SizedBox(height: 12.0),
+            Text(
+              error,
+              style: const TextStyle(
+                color: Colors.red, 
+                fontSize: 14.0
+              ),
+            ),
           ]),
         )
       )
