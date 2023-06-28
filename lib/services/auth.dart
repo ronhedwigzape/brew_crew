@@ -1,8 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:brew_crew/models/user.dart';
 
 class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  // create user obj based on FirebaseUser
+  FirebaseUser? _userFromFirebaseUser(User user) {
+    return user != null ? FirebaseUser(uid: user.uid) : null;
+  }
+
 
   // sign in anon
   Future signInAnon() async {
@@ -11,11 +19,15 @@ class AuthService {
 
       UserCredential result = await _auth.signInAnonymously();
       User? user = result.user;
-      return user;
+      if (result.user != null) {
+        return _userFromFirebaseUser(user!);
+      }
 
     } catch(e) {
 
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return null;
 
     }
