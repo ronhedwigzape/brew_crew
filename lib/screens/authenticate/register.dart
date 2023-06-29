@@ -32,11 +32,12 @@ class _RegisterState extends State<Register> {
         title: const Text('Sign up to Brew Crew'),
         actions: <Widget>[
           TextButton.icon(
-              icon: const Icon(Icons.person),
-              label: const Text('Sign in'),
-              onPressed: () => {
-                    widget.toggleView(),
-                  }),
+            icon: const Icon(Icons.person),
+            label: const Text('Sign in'),
+            onPressed: () => {
+              widget.toggleView(),
+            }
+          ),
         ],
       ),
       body: Container(
@@ -46,21 +47,23 @@ class _RegisterState extends State<Register> {
           child: Column(children: <Widget>[
             const SizedBox(height: 20.0),
             TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'Email'),
-                validator: (val) => val!.isEmpty ? 'Enter an email' : null,
-                onChanged: (val) {
-                  setState(() => email = val);
-                }),
+              decoration: textInputDecoration.copyWith(hintText: 'Email'),
+              validator: (val) => val!.isEmpty ? 'Enter an email' : null,
+              onChanged: (val) {
+                setState(() => email = val);
+              }
+            ),
             const SizedBox(height: 20.0),
             TextFormField(
-                decoration: textInputDecoration.copyWith(hintText: 'Password'),
-                obscureText: true,
-                validator: (val) => val!.length < 6
-                    ? 'Enter a password 6+ chars long'
-                    : null,
-                onChanged: (val) {
-                  setState(() => password = val);
-                }),
+              decoration: textInputDecoration.copyWith(hintText: 'Password'),
+              obscureText: true,
+              validator: (val) => val!.length < 6
+                  ? 'Enter a password 6+ chars long'
+                  : null,
+              onChanged: (val) {
+                setState(() => password = val);
+              }
+            ),
             const SizedBox(height: 20.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
