@@ -1,7 +1,6 @@
 import 'package:brew_crew/models/brew.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:brew_crew/services/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:brew_crew/screens/home/brew_list.dart';
