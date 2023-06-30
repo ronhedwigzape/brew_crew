@@ -9,7 +9,7 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<FirebaseUser?>(context);
+    final user = Provider.of<FireUser?>(context);
 
     // return either the Home or Authenticate widget
     if (user == null) {

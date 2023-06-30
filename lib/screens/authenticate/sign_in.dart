@@ -38,7 +38,10 @@ class _SignInState extends State<SignIn> {
             label: const Text('Register'),
             onPressed: () => {
               widget.toggleView()
-            }
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.black,
+            )
           ),
         ],
       ),

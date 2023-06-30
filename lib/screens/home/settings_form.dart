@@ -14,6 +14,7 @@ class SettingsForm extends StatefulWidget {
 }
 
 class _SettingsFormState extends State<SettingsForm> {
+  
   final _formKey = GlobalKey<FormState>();
   final List<String> sugars = ['0', '1', '2', '3', '4'];
 
@@ -22,32 +23,22 @@ class _SettingsFormState extends State<SettingsForm> {
   String? _currentSugars;
   int? _currentStrength;
 
-  String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter a name';
-    }
-    return null;
-  }
-
-  void onNameChanged(String value) {
-    setState(() {
-      _currentName = value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
 
-    final user = Provider.of<FirebaseUser?>(context);
+    final user = Provider.of<FireUser?>(context);
 
-    return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: user?.uid).userData,
+    return FutureBuilder<UserData>(
+      future: DatabaseService(uid: user?.uid).userData.first,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final userData = snapshot.data;
-          _currentName = userData?.name;
-          _currentSugars = userData?.sugars;
-          _currentStrength = userData?.strength;
+
+          UserData? userData = snapshot.data;
+
+          _currentName ??= userData?.name;
+          _currentSugars ??= userData?.sugars;
+          _currentStrength ??= userData?.strength;
+          
           return Form(
             key: _formKey,
             child: Column(
@@ -60,8 +51,8 @@ class _SettingsFormState extends State<SettingsForm> {
                 TextFormField(
                   initialValue: userData?.name,
                   decoration: textInputDecoration,
-                  validator: validateName,
-                  onChanged: onNameChanged,
+                  validator: (val) => val!.isEmpty ? 'Please enter a name' : null,
+                  onChanged: (val) => setState(() => _currentName = val),
                 ),
                 const SizedBox(height: 20.0),
                 // dropdown
@@ -82,14 +73,21 @@ class _SettingsFormState extends State<SettingsForm> {
                 ),
                 // slider
                 Slider(
-                  min: 100,
-                  max: 900,
+                  min: 100.0,
+                  max: 900.0,
                   divisions: 8,
                   label: _currentStrength?.toString() ?? '100',
                   activeColor: Colors.brown[_currentStrength ?? userData!.strength!],
                   inactiveColor: Colors.brown[_currentStrength ?? userData!.strength!],
                   value: (_currentStrength ?? userData?.strength)!.toDouble(), // .toDouble() converts int to double
-                  onChanged: (val) => setState(() => _currentStrength = val.round()), // val.round() converts double to int
+                  onChanged: (val) {
+                    if (kDebugMode) {
+                      print('Slider value: $val');
+                    }
+                    setState(() {
+                      _currentStrength = val.round();
+                    });
+                  },
                 ),
                 // button
                 ElevatedButton(
@@ -98,12 +96,18 @@ class _SettingsFormState extends State<SettingsForm> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      if (kDebugMode) {
-                        print('valid');
-                        print(_currentName);
-                        print(_currentSugars);
-                        print(_currentStrength);
-                      }
+                      await DatabaseService(uid: user?.uid).updateUserData(
+                        _currentSugars ?? userData!.sugars!,
+                        _currentName ?? userData!.name!,
+                        _currentStrength ?? userData!.strength!,
+                      );
+                      Navigator.pop(context);
+                    }
+                    if (kDebugMode) {
+                      print('valid');
+                      print(_currentName);
+                      print(_currentSugars);
+                      print(_currentStrength);
                     }
                   },
                   child: const Text(
@@ -114,11 +118,10 @@ class _SettingsFormState extends State<SettingsForm> {
               ]
             ),
           );
-        }
-        else {
+        } else {
           return const Loading();
         }
-      }
+      },
     );
   }
 }

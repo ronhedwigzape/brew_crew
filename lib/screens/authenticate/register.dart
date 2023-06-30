@@ -36,7 +36,10 @@ class _RegisterState extends State<Register> {
             label: const Text('Sign in'),
             onPressed: () => {
               widget.toggleView(),
-            }
+            },
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.black,
+            )
           ),
         ],
       ),
