@@ -65,6 +65,16 @@ class _SettingsFormState extends State<SettingsForm> {
             }, 
           ),
           // slider
+          Slider(
+            min: 100,
+            max: 900,
+            divisions: 8,
+            label: _currentStrength?.toString() ?? '100',
+            activeColor: Colors.brown[_currentStrength ?? 100],
+            inactiveColor: Colors.brown[_currentStrength ?? 100],
+            value: (_currentStrength ?? 100).toDouble(), // .toDouble() converts int to double
+            onChanged: (val) => setState(() => _currentStrength = val.round()), // val.round() converts double to int
+          ),
           // button
           ElevatedButton(
             style: ElevatedButton.styleFrom(
